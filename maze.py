@@ -42,5 +42,4 @@ class Maze:
                 color = BLACK if maze[y][x] == 1 else accent
                 # Differs from maze 2 by adding maze width * cell size
                 pygame.draw.rect(screen, color, (x * CELL_SIZE + offset, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-            # endpoint: 31,25
         pygame.draw.rect(screen, GREEN, (31 * CELL_SIZE + offset, 25 * CELL_SIZE, CELL_SIZE, CELL_SIZE))
