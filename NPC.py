@@ -14,9 +14,4 @@ class NPC:
     def draw(self, screen):
         pygame.draw.rect(screen, (0, 255, 255), (self.x * CELL_SIZE + MAZE_WIDTH * CELL_SIZE, self.y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-    def aiMove(self, maze, dx, dy):
-        if 0 <= self.x + dx < len(maze[0]) and 0 <= self.y + dy < len(maze):
-            if abs(dx) > abs(dy):
-                self.x += 1 if dx > 0 else -1
-            else:
-                self.y += 1 if dy > 0 else -1
+# def aiMove not implemented (but soon)
