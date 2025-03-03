@@ -4,11 +4,13 @@ from maze import Maze
 from NPC import NPC
 
 # Constants
-CELL_SIZE = 18
+HARD_SIZE = 6
+MED_SIZE = 18 # default size
+EASY_SIZE = 24
 WIDTH = 1188 # total width of screen
 HEIGHT = 486 # total height
-MAZE_WIDTH = WIDTH // 2  // CELL_SIZE 
-MAZE_HEIGHT = HEIGHT // CELL_SIZE
+MAZE_WIDTH = WIDTH // 2  // MED_SIZE 
+MAZE_HEIGHT = HEIGHT // MED_SIZE
 
 # Colors so I don't have to do slightly more work
 BLACK = (0, 0, 0)
@@ -20,7 +22,7 @@ DARK_CYAN = (40, 60, 60)
 
 # Initialize pygame and screen
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+global screen
 
 # Generate two mazes
 maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
@@ -28,10 +30,10 @@ maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
 endpoint = [31, 25]
 
 # Player positions
-player1Pos = [1, 1] # Top left corner of maze 1
+playerPos = [1, 1] # Top left corner of maze 1
 NPCPos = [1, 1] # Top left corner of maze 2
-p1Score = 0
-p2Score = 0
+pScore = 0
+NPCScore = 0
 
 # Main loop
 running = True
@@ -52,60 +54,63 @@ while running:
 
     # Resets player positions to start if they want
     if keys[pygame.K_LSHIFT]:
-        player1Pos = [1,1]
+        playerPos = [1,1]
     if keys[pygame.K_RSHIFT]:
         NPCPos = [1,1]
 
     # Moving player1 with wasd
     if keys[pygame.K_w]:
-        Player.movePlayer(player1Pos, maze1, 0, -1)
-        Player.score(player1Pos, endpoint, p1Score)
+        Player.movePlayer(playerPos, maze1, 0, -1)
     if keys[pygame.K_s]:
-        Player.movePlayer(player1Pos, maze1, 0, 1)
-        Player.score(player1Pos, endpoint, p1Score)
+        Player.movePlayer(playerPos, maze1, 0, 1)
     if keys[pygame.K_a]:
-        Player.movePlayer(player1Pos, maze1, -1, 0)
-        Player.score(player1Pos, endpoint, p1Score)
+        Player.movePlayer(playerPos, maze1, -1, 0)
     if keys[pygame.K_d]:  
-        Player.movePlayer(player1Pos, maze1, 1, 0)
-        Player.score(player1Pos, endpoint, p1Score)
+        Player.movePlayer(playerPos, maze1, 1, 0)
     
     # Moving NPC with arrow keys
     dx, dy = 0, 0
     if keys[pygame.K_UP]:
-        Player.movePlayer(NPCPos, maze2, 0, -1)
-        Player.score(NPCPos, endpoint, p2Score)
+        Player.movePlayer(NPCPos, maze2, 0, -1)    
     if keys[pygame.K_DOWN]:
         Player.movePlayer(NPCPos, maze2, 0, 1)
-        Player.score(NPCPos, endpoint, p2Score)
     if keys[pygame.K_LEFT]:
         Player.movePlayer(NPCPos, maze2, -1, 0)
-        Player.score(NPCPos, endpoint, p2Score)
     if keys[pygame.K_RIGHT]:
         Player.movePlayer(NPCPos, maze2, 1, 0)
-        Player.score(NPCPos, endpoint, p2Score)
-   
+       
+    
+
+    size = MED_SIZE
+    # I implement this later for an optional step ok ok
+    if size == 1:
+        size = EASY_SIZE
+    elif size == 3:
+        size = HARD_SIZE
+
     # Render mazes
-    Maze.renderMaze(maze1, screen, 0, DARK_RED)
-    Maze.renderMaze(maze2, screen, (MAZE_WIDTH * CELL_SIZE), DARK_CYAN)
+    Maze.renderMaze(maze1, Maze.screen, 0, DARK_RED, size)
+    Maze.renderMaze(maze2, Maze.screen, (MAZE_WIDTH * MED_SIZE), DARK_CYAN, size)
     
     # Render player & NPC
-    player = Player(player1Pos[0], player1Pos[1])
-    player.draw(screen)
+    player = Player(playerPos[0], playerPos[1])
+    player.draw(Maze.screen, size)
 
     npc = NPC(NPCPos[0], NPCPos[1])
-    npc.draw(screen)
-
+    npc.draw(Maze.screen)
+    
+    Player.score(maze1, False, playerPos, pScore)
+    Player.score(maze2, True, NPCPos, NPCScore)
     # Text for scores
     pygame.font.init()
     font = pygame.font.SysFont('ubuntu sans', 15)
     
-    text1 = font.render('Player 1: ' + str(p1Score), True, (RED))
-    text2 = font.render('Player 2: ' + str(p2Score), True, (CYAN))
+    text1 = font.render('Player: ' + str(pScore), True, (RED))
+    text2 = font.render('NPC: ' + str(NPCScore), True, (CYAN))
 
-    screen.blit(text1, (0, 0))
-    screen.blit(text2, (WIDTH / 2, 0))
-
+    Maze.screen.blit(text1, (0, 0))
+    Maze.screen.blit(text2, (WIDTH / 2, 0))
+    print(pScore)
     # Update display
     pygame.display.flip()
 
