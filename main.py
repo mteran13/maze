@@ -1,5 +1,6 @@
 import pygame
 from player import Player
+import player
 from maze import Maze
 from NPC import NPC
 
@@ -32,19 +33,13 @@ endpoint = [31, 25]
 # Player positions
 playerPos = [1, 1] # Top left corner of maze 1
 NPCPos = [1, 1] # Top left corner of maze 2
-pScore = 0
-NPCScore = 0
 
 # Main loop
 running = True
 clock = pygame.time.Clock()
 
 while running:
-
-    # Event handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    Maze.screen.fill((0, 0, 0))
 
     # Get keys for player movement
     keys = pygame.key.get_pressed()
@@ -57,6 +52,10 @@ while running:
         playerPos = [1,1]
     if keys[pygame.K_RSHIFT]:
         NPCPos = [1,1]
+
+    # For dev, take this out later
+    if keys[pygame.K_f]:
+        playerPos = [31, 24]
 
     # Moving player1 with wasd
     if keys[pygame.K_w]:
@@ -79,7 +78,6 @@ while running:
     if keys[pygame.K_RIGHT]:
         Player.movePlayer(NPCPos, maze2, 1, 0)
        
-    
 
     size = MED_SIZE
     # I implement this later for an optional step ok ok
@@ -93,27 +91,27 @@ while running:
     Maze.renderMaze(maze2, Maze.screen, (MAZE_WIDTH * MED_SIZE), DARK_CYAN, size)
     
     # Render player & NPC
-    player = Player(playerPos[0], playerPos[1])
-    player.draw(Maze.screen, size)
+    play = Player(playerPos[0], playerPos[1])
+    play.draw(Maze.screen, size)
 
     npc = NPC(NPCPos[0], NPCPos[1])
     npc.draw(Maze.screen)
     
-    Player.score(maze1, False, playerPos, pScore)
-    Player.score(maze2, True, NPCPos, NPCScore)
-    # Text for scores
-    pygame.font.init()
-    font = pygame.font.SysFont('ubuntu sans', 15)
     
-    text1 = font.render('Player: ' + str(pScore), True, (RED))
-    text2 = font.render('NPC: ' + str(NPCScore), True, (CYAN))
+    Player.score(maze1, False, playerPos)
+    Player.score(maze2, True, NPCPos)
 
-    Maze.screen.blit(text1, (0, 0))
-    Maze.screen.blit(text2, (WIDTH / 2, 0))
-    print(pScore)
+    Player.drawScore(Maze.screen, player.pScore, player.NPCScore)
+
     # Update display
     pygame.display.flip()
 
     # Cap the frame rate
     clock.tick(13) # lucky number :)
+
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
 pygame.quit()
