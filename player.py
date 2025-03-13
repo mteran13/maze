@@ -37,7 +37,7 @@ class Player:
                 playerPos[0] += dx
                 playerPos[1] += dy
 
-    # Works now
+
     def score(maze, isMaze2, player):
         global pScore
         global NPCScore
