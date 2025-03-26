@@ -1,10 +1,12 @@
 import pygame
 from maze import Maze
-from NPC import NPC
 
-HARD_SIZE = 6
 MED_SIZE = 18 # default size
-EASY_SIZE = 24
+"""
+HARD_SIZE = 6
+EASY_SIZE = 24"
+implement later if I do difficulty
+"""
 
 WIDTH = 1188 # total width of screen
 HEIGHT = 486 # total height
@@ -25,8 +27,8 @@ class Player:
         self.x = x
         self.y = y
     
-    def draw(self, screen, size):
-        pygame.draw.rect(screen, (255, 0, 0), (self.x * size, self.y * size, size, size))
+    def draw(self, screen, size, offset, color):
+        pygame.draw.rect(screen, color, (self.x * size + offset, self.y * size, size, size))
     
     # Player movement
     def movePlayer(playerPos, maze, dx, dy):
@@ -36,7 +38,6 @@ class Player:
             if maze[y + dy][x + dx] == '': 
                 playerPos[0] += dx
                 playerPos[1] += dy
-
 
     def score(maze, isMaze2, player):
         global pScore
@@ -65,3 +66,23 @@ class Player:
 
         screen.blit(pScoreText, (0, 0))
         screen.blit(NPCScoreText, (WIDTH / 2, 0))
+
+class NPC(Player):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def aiMove(self):
+        xSpeed = 6
+        ySpeed = 6
+        self.x += xSpeed
+        self.y += ySpeed
+
+        if self.x + MED_SIZE >= WIDTH or self.x <= 0:
+            xSpeed *= -1
+        if self.y + MED_SIZE >= HEIGHT or self.y <= 0:
+            ySpeed *= -1
+
+    def getX(self):
+        return self.x
+    
