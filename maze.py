@@ -1,9 +1,13 @@
 import random
 import pygame
 
-HARD_SIZE = 6
+
 MED_SIZE = 18 # default size
-EASY_SIZE = 24
+"""
+HARD_SIZE = 6
+EASY_SIZE = 24"
+implement later if I do difficulty
+"""
 
 WIDTH = 1188 # total width of screen
 HEIGHT = 486 # total height
