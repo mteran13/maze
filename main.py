@@ -2,12 +2,14 @@ import pygame
 from player import Player
 import player
 from maze import Maze
-from NPC import NPC
 
 # Constants
-HARD_SIZE = 6
 MED_SIZE = 18 # default size
-EASY_SIZE = 24
+"""
+HARD_SIZE = 6
+EASY_SIZE = 24"
+implement later if I do difficulty
+"""
 WIDTH = 1188 # total width of screen
 HEIGHT = 486 # total height
 MAZE_WIDTH = WIDTH // 2  // MED_SIZE 
@@ -40,6 +42,11 @@ clock = pygame.time.Clock()
 
 while running:
     Maze.screen.fill((0, 0, 0))
+
+     # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
     # Get keys for player movement
     keys = pygame.key.get_pressed()
@@ -80,11 +87,13 @@ while running:
        
 
     size = MED_SIZE
-    # I implement this later for an optional step ok ok
+    """
+    I implement this later for an optional step ok ok
     if size == 1:
         size = EASY_SIZE
     elif size == 3:
         size = HARD_SIZE
+    """
 
     # Render mazes
     Maze.renderMaze(maze1, Maze.screen, 0, DARK_RED, size)
@@ -92,11 +101,11 @@ while running:
     
     # Render player & NPC
     play = Player(playerPos[0], playerPos[1])
-    play.draw(Maze.screen, size)
+    play.draw(Maze.screen, size, 0, RED)
 
-    npc = NPC(NPCPos[0], NPCPos[1])
-    npc.draw(Maze.screen)
-    
+    npc = player.NPC(NPCPos[0], NPCPos[1])
+    npc.draw(Maze.screen, size, (MAZE_WIDTH * MED_SIZE), CYAN)
+    npc.aiMove()
     
     Player.score(maze1, False, playerPos)
     Player.score(maze2, True, NPCPos)
@@ -108,10 +117,5 @@ while running:
 
     # Cap the frame rate
     clock.tick(13) # lucky number :)
-
-    # Event handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
 pygame.quit()
