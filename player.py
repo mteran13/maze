@@ -62,7 +62,7 @@ class Player:
         font = pygame.font.SysFont('ubuntu sans', 15)
     
         pScoreText = font.render(f"Player: {pScore}", True, RED)
-        NPCScoreText = font.render(f"NPC: {NPCScore}", True, CYAN)
+        NPCScoreText = font.render(f"(future) NPC: {NPCScore}", True, CYAN)
 
         screen.blit(pScoreText, (0, 0))
         screen.blit(NPCScoreText, (WIDTH / 2, 0))
