@@ -1,4 +1,5 @@
 import pygame
+import random
 from maze import Maze
 
 MED_SIZE = 18 # default size
@@ -20,6 +21,8 @@ DARK_CYAN = (40, 60, 60)
 
 pScore = 0
 NPCScore = 0
+
+directions = ["up", "down", "left", "right"]
 
 class Player:
 
@@ -71,18 +74,4 @@ class NPC(Player):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
-    def aiMove(self):
-        xSpeed = 6
-        ySpeed = 6
-        self.x += xSpeed
-        self.y += ySpeed
-
-        if self.x + MED_SIZE >= WIDTH or self.x <= 0:
-            xSpeed *= -1
-        if self.y + MED_SIZE >= HEIGHT or self.y <= 0:
-            ySpeed *= -1
-
-    def getX(self):
-        return self.x
     
