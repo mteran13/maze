@@ -1,4 +1,5 @@
 import pygame
+import random
 from player import Player
 import player
 from maze import Maze
@@ -74,17 +75,20 @@ while running:
     if keys[pygame.K_d]:  
         Player.movePlayer(playerPos, maze1, 1, 0)
     
-    # Moving NPC with arrow keys
+    # Moving NPC randomly for now
+    directions = ["up", "down", "left", "right"]
     dx, dy = 0, 0
-    if keys[pygame.K_UP]:
+    choice = random.choice(directions)
+    if choice == "up":
         Player.movePlayer(NPCPos, maze2, 0, -1)    
-    if keys[pygame.K_DOWN]:
+    if choice == "down":
         Player.movePlayer(NPCPos, maze2, 0, 1)
-    if keys[pygame.K_LEFT]:
+    if choice == "left":
         Player.movePlayer(NPCPos, maze2, -1, 0)
-    if keys[pygame.K_RIGHT]:
+    if choice == "right":
         Player.movePlayer(NPCPos, maze2, 1, 0)
-       
+
+    
 
     size = MED_SIZE
     """
@@ -105,7 +109,6 @@ while running:
 
     npc = player.NPC(NPCPos[0], NPCPos[1])
     npc.draw(Maze.screen, size, (MAZE_WIDTH * MED_SIZE), CYAN)
-    npc.aiMove()
     
     Player.score(maze1, False, playerPos)
     Player.score(maze2, True, NPCPos)
