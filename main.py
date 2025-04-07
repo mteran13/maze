@@ -4,6 +4,7 @@ from player import Player
 import player
 from maze import Maze
 
+
 # Constants
 MED_SIZE = 18 # default size
 """
@@ -33,13 +34,18 @@ maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
 maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
 endpoint = [31, 25]
 
-# Player positions
-playerPos = [1, 1] # Top left corner of maze 1
-NPCPos = [1, 1] # Top left corner of maze 2
+# Player positions initally at top left corner of respective mazes
+playerPos = [1, 1] 
+NPCPos = [1, 1] 
 
 # Main loop
 running = True
 clock = pygame.time.Clock()
+maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+
+maze1Regen = False
+maze2Regen = False
 
 while running:
     Maze.screen.fill((0, 0, 0))
@@ -74,42 +80,39 @@ while running:
         Player.movePlayer(playerPos, maze1, -1, 0)
     if keys[pygame.K_d]:  
         Player.movePlayer(playerPos, maze1, 1, 0)
-    
-    # Moving NPC randomly for now
-    directions = ["up", "down", "left", "right"]
-    dx, dy = 0, 0
-    choice = random.choice(directions)
-    if choice == "up":
-        Player.movePlayer(NPCPos, maze2, 0, -1)    
-    if choice == "down":
+
+    if keys[pygame.K_UP]:
+        NPCPos = [31, 24]
+    if keys[pygame.K_DOWN]:
         Player.movePlayer(NPCPos, maze2, 0, 1)
-    if choice == "left":
-        Player.movePlayer(NPCPos, maze2, -1, 0)
-    if choice == "right":
-        Player.movePlayer(NPCPos, maze2, 1, 0)
 
-    
+    if playerPos == [31, 25]:
+        playerPos = [1, 1]
+        maze1Regen = True
 
-    size = MED_SIZE
-    """
-    I implement this later for an optional step ok ok
-    if size == 1:
-        size = EASY_SIZE
-    elif size == 3:
-        size = HARD_SIZE
-    """
+    if NPCPos == [31, 25]:
+        NPCPos = [1, 1]
+        maze2Regen = True
+
+    if maze1Regen:
+        maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+        maze1Regen = False
+
+    if maze2Regen:
+        maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+        maze2Regen = False
 
     # Render mazes
-    Maze.renderMaze(maze1, Maze.screen, 0, DARK_RED, size)
-    Maze.renderMaze(maze2, Maze.screen, (MAZE_WIDTH * MED_SIZE), DARK_CYAN, size)
-    
-    # Render player & NPC
+    Maze.renderMaze(maze1, Maze.screen, 0, DARK_RED, MED_SIZE)
+    Maze.renderMaze(maze2, Maze.screen, (MAZE_WIDTH * MED_SIZE), DARK_CYAN, MED_SIZE)
+
+    #Render player and NPC
     play = Player(playerPos[0], playerPos[1])
-    play.draw(Maze.screen, size, 0, RED)
+    play.draw(Maze.screen, MED_SIZE, 0, RED)
 
     npc = player.NPC(NPCPos[0], NPCPos[1])
-    npc.draw(Maze.screen, size, (MAZE_WIDTH * MED_SIZE), CYAN)
-    
+    npc.draw(Maze.screen, MED_SIZE, (MAZE_WIDTH * MED_SIZE), CYAN)
+
     Player.score(maze1, False, playerPos)
     Player.score(maze2, True, NPCPos)
 
