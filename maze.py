@@ -1,5 +1,6 @@
 import random
 import pygame
+import time
 
 
 MED_SIZE = 18 # default size
@@ -15,7 +16,7 @@ MAZE_WIDTH = WIDTH // 2  // MED_SIZE
 MAZE_HEIGHT = HEIGHT // MED_SIZE 
 
 # Colors so I don't have to do slightly more work
-BLACK = (0, 0, 0)
+BLACK = (0, 0, 0) 
 RED = (255, 0, 0)
 CYAN = (0, 255, 255)
 GREEN = (0, 255, 0)
@@ -27,6 +28,7 @@ class Maze:
 
     # Lot of help from geeksforgeeks.org and stack overflow to get syntax for backtracking algorithm
     def generateMaze(width, height):
+        random.seed(time.time()) # use current time as seed for random num
         maze = [[1 for _ in range(width)] for _ in range(height)] # Generate matrix of 1s 
 
         def carve(x, y):
