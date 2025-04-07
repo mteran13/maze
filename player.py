@@ -1,6 +1,7 @@
 import pygame
 import random
 from maze import Maze
+from collections import deque
 
 MED_SIZE = 18 # default size
 """
@@ -56,9 +57,13 @@ class Player:
                 offset = 0
                 color = DARK_RED
                 pScore += 1
-            nu = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
-            Maze.renderMaze(nu, Maze.screen, offset, color, MED_SIZE)
-            return ("player: " + str(pScore) + "NPC: " + str(NPCScore))
+            
+            newMaze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+            newMaze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+
+            Maze.renderMaze(newMaze1, Maze.screen, 0, color, MED_SIZE)
+            Maze.renderMaze(newMaze2, Maze.screen, offset, color, MED_SIZE)
+            return f"player: {pScore} NPC: {NPCScore}"
     
     def drawScore(screen, pScore, NPCScore):
         pygame.font.init()
@@ -72,6 +77,35 @@ class Player:
 
 class NPC(Player):
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        super().__init__(x, y)
+        self.path = []
+    
+    def findPath(self, maze, start, goal):
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] # right, down, left, up
+        # BFS to find shortest path
+        queue = deque([(start[0], start[1], [])])
+        visited = set()
+        visited.add((start[0], start[1]))
+
+        while queue:
+            x, y, path = queue.popleft()
+            # If reached goal, return path
+            if (x, y) == goal:
+                return path
+            # Check all 4 directions
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < len(maze[0]) and 0 <= ny < len(maze) and maze[ny][nx] == '' and (nx, ny) not in visited:
+                    visited.add((nx, ny))
+                    queue.append((nx, ny, path + [(nx, ny)]))
+        return []
+    
+    def moveNPC(self, maze, goal):
+        # Find next step in path to goal
+        path = self.findPath(maze, [self.x, self.y], goal)
+
+        if self.path:
+            nextStep = self.path[0] #Take first step to goal
+            self.x, self.y = nextStep
+
     
