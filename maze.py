@@ -2,7 +2,6 @@ import random
 import pygame
 import time
 
-
 MED_SIZE = 18 # default size
 """
 HARD_SIZE = 6
@@ -20,8 +19,8 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 CYAN = (0, 255, 255)
 GREEN = (0, 255, 0)
-DARK_RED = (60, 40, 40)
-DARK_CYAN = (40, 60, 60)
+DARK_RED = (70, 0, 0)
+DARK_CYAN = (0, 70, 70)
 
 class Maze:
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
