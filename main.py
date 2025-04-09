@@ -1,5 +1,4 @@
 import pygame
-import random
 from player import Player
 import player
 from maze import Maze
@@ -22,16 +21,14 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 CYAN = (0, 255, 255)
 GREEN = (0, 255, 0)
-DARK_RED = (60, 40, 40)
-DARK_CYAN = (40, 60, 60)
+DARK_RED = (70, 0, 0)
+DARK_CYAN = (0, 70, 70)
 
 # Initialize pygame and screen
 pygame.init()
-global screen
+global screen # global so it can be accessed everywhere and in different files
 
-# Generate two mazes
-maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
-maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+# Easier reference to endpoint 
 endpoint = [31, 25]
 
 # Player positions initally at top left corner of respective mazes
@@ -40,10 +37,15 @@ NPCPos = [1, 1]
 
 # Main loop
 running = True
+
+# later in charge of ticks
 clock = pygame.time.Clock()
+
+#generated mazes to start with
 maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
 maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
 
+# Initially set to false, true when player reaches end
 maze1Regen = False
 maze2Regen = False
 
@@ -81,23 +83,21 @@ while running:
     if keys[pygame.K_d]:  
         Player.movePlayer(playerPos, maze1, 1, 0)
 
+    # For test purposes (gets to end faster)
     if keys[pygame.K_UP]:
         NPCPos = [31, 24]
     if keys[pygame.K_DOWN]:
         Player.movePlayer(NPCPos, maze2, 0, 1)
-
-    if playerPos == [31, 25]:
-        playerPos = [1, 1]
+    
+    # in charge of generating a new maze when player reaches endpoint
+    if playerPos == endpoint:
         maze1Regen = True
-
-    if NPCPos == [31, 25]:
-        NPCPos = [1, 1]
+    if NPCPos == endpoint:
         maze2Regen = True
 
     if maze1Regen:
         maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
         maze1Regen = False
-
     if maze2Regen:
         maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
         maze2Regen = False
@@ -113,15 +113,17 @@ while running:
     npc = player.NPC(NPCPos[0], NPCPos[1])
     npc.draw(Maze.screen, MED_SIZE, (MAZE_WIDTH * MED_SIZE), CYAN)
 
+    # Calling score to award points
     Player.score(maze1, False, playerPos)
     Player.score(maze2, True, NPCPos)
 
+    # Displaying it on screen
     Player.drawScore(Maze.screen, player.pScore, player.NPCScore)
 
     # Update display
     pygame.display.flip()
 
     # Cap the frame rate
-    clock.tick(13) # lucky number :)
+    clock.tick(10) 
 
 pygame.quit()
