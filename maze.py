@@ -1,29 +1,10 @@
 import random
 import pygame
 import time
-
-MED_SIZE = 18 # default size
-"""
-HARD_SIZE = 6
-EASY_SIZE = 24"
-implement later if I do difficulty
-"""
-
-WIDTH = 1188 # total width of screen
-HEIGHT = 486 # total height
-MAZE_WIDTH = WIDTH // 2  // MED_SIZE 
-MAZE_HEIGHT = HEIGHT // MED_SIZE 
-
-# Colors so I don't have to do slightly more work
-BLACK = (0, 0, 0) 
-RED = (255, 0, 0)
-CYAN = (0, 255, 255)
-GREEN = (0, 255, 0)
-DARK_RED = (70, 0, 0)
-DARK_CYAN = (0, 70, 70)
+import const
 
 class Maze:
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((const.WIDTH, const.HEIGHT))
 
     # Lot of help from geeksforgeeks.org and stack overflow to get syntax for backtracking algorithm
     def generateMaze(width, height):
@@ -46,9 +27,9 @@ class Maze:
         return maze
     
     def renderMaze(maze, screen, offset, accent, size):
-        for y in range(MAZE_HEIGHT):
-            for x in range(MAZE_WIDTH):
-                color = BLACK if maze[y][x] == 1 else accent
+        for y in range(const.MAZE_HEIGHT):
+            for x in range(const.MAZE_WIDTH):
+                color = const.BLACK if maze[y][x] == 1 else accent
                 # Differs from maze 2 by adding maze width * cell size
                 pygame.draw.rect(screen, color, (x * size + offset, y * size, size, size))
-        pygame.draw.rect(screen, GREEN, (31 * size + offset, 25 * size, size, size))
+        pygame.draw.rect(screen, const.GREEN, (31 * size + offset, 25 * size, size, size))
