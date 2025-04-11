@@ -1,4 +1,5 @@
 import pygame
+import const
 from collections import deque
 
 MED_SIZE = 18 # default size
@@ -7,17 +8,6 @@ HARD_SIZE = 6
 EASY_SIZE = 24
 implement later if I do difficulty
 """
-
-WIDTH = 1188 # total width of screen
-HEIGHT = 486 # total height
-MAZE_WIDTH = WIDTH // 2  // MED_SIZE 
-MAZE_HEIGHT = HEIGHT // MED_SIZE
-
-RED = (255, 0, 0)
-CYAN = (0, 255, 255)
-DARK_RED = (70, 0, 0)
-DARK_CYAN = (0, 70, 70)
-
 pScore = 0
 NPCScore = 0
 
@@ -56,15 +46,23 @@ class Player:
                 player[0], player[1] = 1, 1
 
     # draws the score on screen at top    
-    def drawScore(screen, pScore, NPCScore):
-        pygame.font.init()
-        font = pygame.font.SysFont('ubuntu sans', 15)
-    
-        pScoreText = font.render(f"Player: " + str(pScore), True, RED)
-        NPCScoreText = font.render(f"(future) NPC: " + str(NPCScore), True, CYAN)
+    def drawScore(screen, pScore, NPCScore):    
+        pScoreText = const.FONT.render(f"Player: " + str(pScore), True, const.RED)
+        NPCScoreText = const.FONT.render(f"(future) NPC: " + str(NPCScore), True, const.CYAN)
 
         screen.blit(pScoreText, (0, 0))
-        screen.blit(NPCScoreText, (WIDTH / 2, 0))
+        screen.blit(NPCScoreText, (const.WIDTH / 2, 0))
+
+    def drawWin(screen, player, npc):
+        if player:
+            player = "Player"
+            color = const.RED
+        if npc:
+            player = "NPC"
+            color = const.CYAN
+        
+        winText = const.FONT.render(player + " Wins!", True, color)
+        screen.blit(winText, (const.WIDTH / 2 - 50, const.HEIGHT / 2 - 40))
 
 class NPC(Player):
     def __init__(self, x, y):
