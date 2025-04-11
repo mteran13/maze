@@ -2,27 +2,8 @@ import pygame
 from player import Player
 import player
 from maze import Maze
+import const
 
-
-# Constants
-MED_SIZE = 18 # default size
-"""
-HARD_SIZE = 6
-EASY_SIZE = 24"
-implement later if I do difficulty
-"""
-WIDTH = 1188 # total width of screen
-HEIGHT = 486 # total height
-MAZE_WIDTH = WIDTH // 2  // MED_SIZE 
-MAZE_HEIGHT = HEIGHT // MED_SIZE
-
-# Colors so I don't have to do slightly more work
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-CYAN = (0, 255, 255)
-GREEN = (0, 255, 0)
-DARK_RED = (70, 0, 0)
-DARK_CYAN = (0, 70, 70)
 
 # Initialize pygame and screen
 pygame.init()
@@ -42,8 +23,8 @@ running = True
 clock = pygame.time.Clock()
 
 #generated mazes to start with
-maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
-maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+maze1 = Maze.generateMaze(const.MAZE_WIDTH, const.MAZE_HEIGHT)
+maze2 = Maze.generateMaze(const.MAZE_WIDTH, const.MAZE_HEIGHT)
 
 # Initially set to false, true when player reaches end
 maze1Regen = False
@@ -96,22 +77,22 @@ while running:
         maze2Regen = True
 
     if maze1Regen:
-        maze1 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+        maze1 = Maze.generateMaze(const.MAZE_WIDTH, const.MAZE_HEIGHT)
         maze1Regen = False
     if maze2Regen:
-        maze2 = Maze.generateMaze(MAZE_WIDTH, MAZE_HEIGHT)
+        maze2 = Maze.generateMaze(const.MAZE_WIDTH, const.MAZE_HEIGHT)
         maze2Regen = False
 
     # Render mazes
-    Maze.renderMaze(maze1, Maze.screen, 0, DARK_RED, MED_SIZE)
-    Maze.renderMaze(maze2, Maze.screen, (MAZE_WIDTH * MED_SIZE), DARK_CYAN, MED_SIZE)
+    Maze.renderMaze(maze1, Maze.screen, 0, const.DARK_RED, const.MED_SIZE)
+    Maze.renderMaze(maze2, Maze.screen, (const.MAZE_WIDTH * const.MED_SIZE), const.DARK_CYAN, const.MED_SIZE)
 
     #Render player and NPC
     play = Player(playerPos[0], playerPos[1])
-    play.draw(Maze.screen, MED_SIZE, 0, RED)
+    play.draw(Maze.screen, const.MED_SIZE, 0, const.RED)
 
     npc = player.NPC(NPCPos[0], NPCPos[1])
-    npc.draw(Maze.screen, MED_SIZE, (MAZE_WIDTH * MED_SIZE), CYAN)
+    npc.draw(Maze.screen, const.MED_SIZE, (const.MAZE_WIDTH * const.MED_SIZE), const.CYAN)
 
     # Calling score to award points
     Player.score(maze1, False, playerPos)
@@ -119,7 +100,12 @@ while running:
 
     # Displaying it on screen
     Player.drawScore(Maze.screen, player.pScore, player.NPCScore)
-
+    if(player.pScore == 5):
+        Maze.screen.fill((0, 0, 0))
+        Player.drawWin(Maze.screen,True, False)
+    elif(player.NPCScore == 5):
+        Maze.screen.fill((0, 0, 0))
+        Player.drawWin(Maze.screen, False, True)
     # Update display
     pygame.display.flip()
 
