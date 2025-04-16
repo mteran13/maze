@@ -10,7 +10,7 @@ pygame.init()
 global screen # global so it can be accessed everywhere and in different files
 
 # Easier reference to endpoint 
-endpoint = [31, 25]
+endpoint = [35, 31]
 
 # Player positions initally at top left corner of respective mazes
 playerPos = [1, 1] 
@@ -64,11 +64,18 @@ while running:
     if keys[pygame.K_d]:  
         Player.movePlayer(playerPos, maze1, 1, 0)
 
-    # For test purposes (gets to end faster)
+    if keys[pygame.K_g]:
+        print(playerPos)
+
+    # NPC mode
     if keys[pygame.K_UP]:
-        NPCPos = [31, 24]
+        Player.movePlayer(NPCPos, maze2, 0, -1)
     if keys[pygame.K_DOWN]:
         Player.movePlayer(NPCPos, maze2, 0, 1)
+    if keys[pygame.K_LEFT]:
+        Player.movePlayer(NPCPos, maze2, -1, 0)
+    if keys[pygame.K_RIGHT]:  
+        Player.movePlayer(NPCPos, maze2, 1, 0)
     
     # in charge of generating a new maze when player reaches endpoint
     if playerPos == endpoint:
@@ -94,6 +101,8 @@ while running:
     npc = player.NPC(NPCPos[0], NPCPos[1])
     npc.draw(Maze.screen, const.MED_SIZE, (const.MAZE_WIDTH * const.MED_SIZE), const.CYAN)
 
+    npc.moveNPC(maze2, endpoint)
+
     # Calling score to award points
     Player.score(maze1, False, playerPos)
     Player.score(maze2, True, NPCPos)
@@ -106,6 +115,8 @@ while running:
     elif(player.NPCScore == 5):
         Maze.screen.fill((0, 0, 0))
         Player.drawWin(Maze.screen, False, True)
+        while(True):
+            NPCpos = [1, 1]
     # Update display
     pygame.display.flip()
 
