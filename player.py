@@ -37,7 +37,7 @@ class Player:
         global pScore
         global NPCScore
         
-        if player[1] == 25 and player[0] == 31:
+        if player[1] == 35 and player[0] == 33:
             if (isMaze2):
                 NPCScore += 1
                 player[0], player[1] = 1, 1
@@ -61,17 +61,24 @@ class Player:
             player = "NPC"
             color = const.CYAN
         
-        winText = const.FONT.render(player + " Wins!", True, color)
-        screen.blit(winText, (const.WIDTH / 2 - 50, const.HEIGHT / 2 - 40))
+        wFont = pygame.font.Font("/home/mteran/.local/share/fonts/PressStart2P.ttf", 30)
+        winText = wFont.render(player + " Wins!", True, color)
+
+        eFont = pygame.font.Font("/home/mteran/.local/share/fonts/PressStart2P.ttf", 15)
+        escText = eFont.render("Press ESC to exit", True, color)
+
+        screen.blit(winText, (const.WIDTH / 2 - 200, const.HEIGHT / 2 - 40))
+        screen.blit(escText, (const.WIDTH / 2 - 150, const.HEIGHT / 2))
 
 class NPC(Player):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.path = []
+        self.path = [1,1]
     
     # supposed pathfinding - does not work right now
     def findPath(self, maze, start, goal):
-        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] # right, down, left, up
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] # right, down, left, up'playerPos)
+
         # BFS to find shortest path
         queue = deque([(start[0], start[1], [])])
         visited = set()
@@ -95,7 +102,7 @@ class NPC(Player):
         self.path = self.findPath(maze, [self.x, self.y], goal)
 
         if self.path:
-            nextStep = self.path[0] #Take first step to goal
+            nextStep = self.path[1] #Take first step to goal
             self.x, self.y = nextStep
 
     
