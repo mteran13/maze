@@ -4,7 +4,7 @@ import time
 import const
 
 class Maze:
-    screen = pygame.display.set_mode((const.WIDTH, const.HEIGHT))
+    screen = pygame.display.set_mode((const.WIDTH, const.HEIGHT), pygame.RESIZABLE)
 
     # Lot of help from geeksforgeeks.org and stack overflow to get syntax for backtracking algorithm
     def generateMaze(width, height):
@@ -32,4 +32,4 @@ class Maze:
                 color = const.BLACK if maze[y][x] == 1 else accent
                 # Differs from maze 2 by adding maze width * cell size
                 pygame.draw.rect(screen, color, (x * size + offset, y * size, size, size))
-        pygame.draw.rect(screen, const.GREEN, (31 * size + offset, 25 * size, size, size))
+        pygame.draw.rect(screen, const.GREEN, (33 * size + offset, 35 * size, size, size))
