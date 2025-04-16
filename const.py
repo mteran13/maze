@@ -8,8 +8,8 @@ EASY_SIZE = 24"
 implement later if I do difficulty
 """
 
-WIDTH = 1188 # total width of screen
-HEIGHT = 486 # total height
+WIDTH = 1300 # total width of screen
+HEIGHT = 700 # total height
 MAZE_WIDTH = WIDTH // 2  // MED_SIZE 
 MAZE_HEIGHT = HEIGHT // MED_SIZE
 
