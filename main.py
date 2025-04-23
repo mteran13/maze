@@ -10,7 +10,7 @@ pygame.init()
 global screen # global so it can be accessed everywhere and in different files
 
 # Easier reference to endpoint 
-endpoint = [35, 31]
+endpoint = [33, 35]
 
 # Player positions initally at top left corner of respective mazes
 playerPos = [1, 1] 
@@ -52,7 +52,7 @@ while running:
 
     # For dev, take this out later
     if keys[pygame.K_f]:
-        playerPos = [31, 24]
+        playerPos = [33, 34]
 
     # Moving player1 with wasd
     if keys[pygame.K_w]:
@@ -77,7 +77,7 @@ while running:
     if keys[pygame.K_RIGHT]:  
         Player.movePlayer(NPCPos, maze2, 1, 0)
     
-    # in charge of generating a new maze when player reaches endpoint
+    # generating a new maze when player reaches endpoint
     if playerPos == endpoint:
         maze1Regen = True
     if NPCPos == endpoint:
