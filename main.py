@@ -3,6 +3,8 @@ from player import Player
 import player
 from maze import Maze
 import const
+from rl_env import MazeEnv
+from agent import QLearningAgent
 
 
 # Initialize pygame and screen
@@ -29,6 +31,14 @@ maze2 = Maze.generateMaze(const.MAZE_WIDTH, const.MAZE_HEIGHT)
 # Initially set to false, true when player reaches end
 maze1Regen = False
 maze2Regen = False
+
+# Set up RL environment and agent
+rl_env = MazeEnv()
+rl_agent = QLearningAgent(const.MAZE_WIDTH, const.MAZE_HEIGHT)
+
+# Sync agent with inital NPCPos
+rl_env.agent_pos = tuple(NPCPos)
+rl_env.maze = maze2 # Same maze for NPC and agent
 
 while running:
     Maze.screen.fill((0, 0, 0))
@@ -98,10 +108,16 @@ while running:
     play = Player(playerPos[0], playerPos[1])
     play.draw(Maze.screen, const.MED_SIZE, 0, const.RED)
 
-    npc = player.NPC(NPCPos[0], NPCPos[1])
-    npc.draw(Maze.screen, const.MED_SIZE, (const.MAZE_WIDTH * const.MED_SIZE), const.CYAN)
+    npc_agent = Player(NPCPos[0], NPCPos[1])
+    npc_agent.draw(Maze.screen, const.MED_SIZE, (const.MAZE_WIDTH + const.MED_SIZE), const.CYAN)
 
-    npc.moveNPC(maze2, endpoint)
+    # RL Agent movement
+    rl_env.agent_pos = tuple(NPCPos)
+    rl_env.maze = maze2
+    state = rl_env._get_state()
+    action = rl_agent.choose_action(state)
+    _, _, _, _ = rl_env.step(action)
+    NPCPos = list(rl_env.agent_pos) # Update visual NPC position
 
     # Calling score to award points
     Player.score(maze1, False, playerPos)
