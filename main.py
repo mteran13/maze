@@ -109,7 +109,7 @@ while running:
     play.draw(Maze.screen, const.MED_SIZE, 0, const.RED)
 
     npc_agent = Player(NPCPos[0], NPCPos[1])
-    npc_agent.draw(Maze.screen, const.MED_SIZE, (const.MAZE_WIDTH + const.MED_SIZE), const.CYAN)
+    npc_agent.draw(Maze.screen, const.MED_SIZE, (const.MAZE_WIDTH * const.MED_SIZE), const.CYAN)
 
     # RL Agent movement
     rl_env.agent_pos = tuple(NPCPos)
