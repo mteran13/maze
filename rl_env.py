@@ -7,6 +7,7 @@ from const import MED_SIZE, MAZE_HEIGHT, MAZE_WIDTH
 class MazeEnv:
     def __init__(self):
         self.maze = Maze()
+        self.goal = (33, 35)
         self.reset
 
     def reset(self):
@@ -27,7 +28,7 @@ class MazeEnv:
         new_pos = (x + dx, y + dy)
 
         # Check if within bounds and not a wall
-        if (0 <= new_pos[0] < MAZE_WIDTH) and (0 <= new_pos[1] < MAZE_HEIGHT) and not self.maze.grid[new_pos[1]][new_pos[0]].wall:
+        if (0 <= new_pos[0] < MAZE_WIDTH) and (0 <= new_pos[1] < MAZE_HEIGHT) and self.maze[new_pos[1]][new_pos[0]] == '':
             self.agent_pos = new_pos
         reward = -0.01 # Time penalty
         done = False
