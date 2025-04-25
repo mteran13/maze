@@ -54,16 +54,6 @@ while running:
     if keys[pygame.K_ESCAPE]:
         running = False
 
-    # Resets player positions to start if they want
-    if keys[pygame.K_LSHIFT]:
-        playerPos = [1,1]
-    if keys[pygame.K_RSHIFT]:
-        NPCPos = [1,1]
-
-    # For dev, take this out later
-    if keys[pygame.K_f]:
-        playerPos = [33, 34]
-
     # Moving player1 with wasd
     if keys[pygame.K_w]:
         Player.movePlayer(playerPos, maze1, 0, -1)
@@ -77,15 +67,16 @@ while running:
     if keys[pygame.K_g]:
         print(playerPos)
 
-    # NPC mode
-    if keys[pygame.K_UP]:
-        Player.movePlayer(NPCPos, maze2, 0, -1)
-    if keys[pygame.K_DOWN]:
-        Player.movePlayer(NPCPos, maze2, 0, 1)
-    if keys[pygame.K_LEFT]:
-        Player.movePlayer(NPCPos, maze2, -1, 0)
-    if keys[pygame.K_RIGHT]:  
-        Player.movePlayer(NPCPos, maze2, 1, 0)
+    if(keys[pygame.K_n]):
+        # NPC mode
+        if keys[pygame.K_UP]:
+            Player.movePlayer(NPCPos, maze2, 0, -1)
+        if keys[pygame.K_DOWN]:
+            Player.movePlayer(NPCPos, maze2, 0, 1)
+        if keys[pygame.K_LEFT]:
+            Player.movePlayer(NPCPos, maze2, -1, 0)
+        if keys[pygame.K_RIGHT]:  
+            Player.movePlayer(NPCPos, maze2, 1, 0)
     
     # generating a new maze when player reaches endpoint
     if playerPos == endpoint:
@@ -114,8 +105,12 @@ while running:
     # RL Agent movement
     rl_env.agent_pos = tuple(NPCPos)
     rl_env.maze = maze2
+
     state = rl_env._get_state()
     action = rl_agent.choose_action(state)
+    next_state, reward, done, _ = rl_env.step(action)
+    rl_agent.learn(state, action, reward, next_state)
+
     _, _, _, _ = rl_env.step(action)
     NPCPos = list(rl_env.agent_pos) # Update visual NPC position
 
